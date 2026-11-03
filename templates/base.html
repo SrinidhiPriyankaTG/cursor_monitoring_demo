@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monitoring</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Monitoring</h1>
+    <p>Local host demo</p>
+  </header>
+  <main>
+    <section class="server-list" aria-labelledby="servers-heading">
+      <h2 id="servers-heading">Servers</h2>
+      <p class="empty">No servers yet</p>
+    </section>
+    <section class="cards" aria-label="Metrics">
+      <article class="card">
+        <h2>CPU</h2>
+        <p class="empty">Collecting…</p>
+      </article>
+      <article class="card">
+        <h2>Memory</h2>
+        <p class="empty">Collecting…</p>
+      </article>
+      <article class="card">
+        <h2>Network</h2>
+        <p class="empty">Collecting…</p>
+      </article>
+      <article class="card">
+        <h2>Ports</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Protocol</th>
+              <th>Port</th>
+              <th>Process</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="3" class="empty">Collecting…</td>
+            </tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
