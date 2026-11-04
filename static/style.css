@@ -21,6 +21,11 @@ body {
 }
 
 header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   background: var(--header);
   color: var(--header-text);
   padding: 1.25rem 2rem;
@@ -86,4 +91,84 @@ th {
 
 td.empty {
   text-align: center;
+}
+
+.card.ports,
+.card.narrow {
+  grid-column: 1 / -1;
+}
+
+.narrow {
+  max-width: 32rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-actions a {
+  color: var(--header-text);
+}
+
+.stack label {
+  display: block;
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  margin-top: 0.25rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+}
+
+button {
+  margin-top: 0.75rem;
+  padding: 0.45rem 0.85rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--header);
+  color: var(--header-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+button.danger {
+  margin-top: 0;
+  background: #8a3a3a;
+}
+
+.error {
+  min-height: 1.25rem;
+  margin: 0 0 0.5rem;
+  color: #8a2b2b;
+  font-weight: 600;
+}
+
+.hint {
+  margin: 0.75rem 0 0;
+  color: var(--empty);
+}
+
+h3 {
+  margin: 1.25rem 0 0.25rem;
+  font-size: 1rem;
+}
+
+.server-list form.stack {
+  margin-bottom: 0.5rem;
+}
+
+#memory-value p {
+  margin: 0.2rem 0;
 }
