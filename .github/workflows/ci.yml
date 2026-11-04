@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pinned dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Run pytest
+        run: pytest
+
+      - name: Smoke-check that the app boots
+        run: |
+          set -euo pipefail
+          db="$(mktemp)"
+          secret="$(python -c 'import secrets; print(secrets.token_hex(32))')"
+          MONITOR_DATABASE="$db" MONITOR_SECRET="$secret" python app.py >smoke.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" >/dev/null 2>&1 || true' EXIT
+          ok=0
+          for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
+            if curl -fsS http://127.0.0.1:5000/login >/dev/null; then
+              ok=1
+              break
+            fi
+            sleep 0.5
+          done
+          if [[ "$ok" -ne 1 ]]; then
+            cat smoke.log
+            exit 1
+          fi

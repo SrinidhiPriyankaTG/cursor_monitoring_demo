@@ -8,45 +8,25 @@
 </head>
 <body>
   <header>
-    <h1>Monitoring</h1>
-    <p>Local host demo</p>
+    <div>
+      <h1>Monitoring</h1>
+      <p>Local host demo</p>
+    </div>
+    {% if session.get("username") %}
+    <div class="header-actions">
+      <span>{{ session.get("username") }}</span>
+      {% if session.get("role") == "admin" %}
+      <a href="{{ url_for('new_user_form') }}">Add user</a>
+      {% endif %}
+      <form method="post" action="{{ url_for('logout') }}">
+        <button type="submit">Sign out</button>
+      </form>
+    </div>
+    {% endif %}
   </header>
   <main>
-    <section class="server-list" aria-labelledby="servers-heading">
-      <h2 id="servers-heading">Servers</h2>
-      <p class="empty">No servers yet</p>
-    </section>
-    <section class="cards" aria-label="Metrics">
-      <article class="card">
-        <h2>CPU</h2>
-        <p class="empty">Collecting…</p>
-      </article>
-      <article class="card">
-        <h2>Memory</h2>
-        <p class="empty">Collecting…</p>
-      </article>
-      <article class="card">
-        <h2>Network</h2>
-        <p class="empty">Collecting…</p>
-      </article>
-      <article class="card">
-        <h2>Ports</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Protocol</th>
-              <th>Port</th>
-              <th>Process</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="3" class="empty">Collecting…</td>
-            </tr>
-          </tbody>
-        </table>
-      </article>
-    </section>
+    {% block content %}{% endblock %}
   </main>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

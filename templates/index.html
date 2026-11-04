@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="server-list" aria-labelledby="servers-heading">
+  <h2 id="servers-heading">Servers</h2>
+  {% if error %}
+  <p class="error">{{ error }}</p>
+  {% endif %}
+  {% if servers %}
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Note</th>
+        <th>Status</th>
+        {% if is_admin %}<th></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for server in servers %}
+      <tr>
+        <td>{{ server.name }}</td>
+        <td>{{ server.address }}</td>
+        <td>{{ server.note or "" }}</td>
+        <td>
+          {% if server.address == "localhost" %}
+          Monitored
+          {% else %}
+          Metrics unavailable
+          {% endif %}
+        </td>
+        {% if is_admin %}
+        <td>
+          <form method="post" action="{{ url_for('remove_server', server_id=server.id) }}" onsubmit="return confirm('Remove this server?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="submit" class="danger">Remove</button>
+          </form>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">No servers yet</p>
+  {% endif %}
+  <p class="hint">Live numbers below are read from this machine. An address in the list is not opened.</p>
+  {% if is_admin %}
+  <h3>Add server</h3>
+  <form method="post" action="{{ url_for('add_server') }}" class="stack">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="name">Name</label>
+    <input id="name" name="name" required>
+    <label for="address">Address</label>
+    <input id="address" name="address" required>
+    <label for="note">Note</label>
+    <input id="note" name="note">
+    <button type="submit">Add server</button>
+  </form>
+  {% endif %}
+</section>
+<section class="cards" aria-label="Metrics">
+  <article class="card">
+    <h2>CPU</h2>
+    <p class="hint">Overall busy percent</p>
+    <p id="cpu-value" class="empty">Collecting…</p>
+  </article>
+  <article class="card">
+    <h2>Memory</h2>
+    <div id="memory-value" class="empty">Collecting…</div>
+  </article>
+  <article class="card">
+    <h2>Network</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Interface</th>
+          <th>Received bytes</th>
+          <th>Transmitted bytes</th>
+          <th>Receive /s</th>
+          <th>Transmit /s</th>
+        </tr>
+      </thead>
+      <tbody id="network-body">
+        <tr>
+          <td colspan="5" class="empty">Collecting…</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+  <article class="card ports">
+    <h2>Ports</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Protocol</th>
+          <th>Port</th>
+          <th>Process</th>
+        </tr>
+      </thead>
+      <tbody id="ports-body">
+        <tr>
+          <td colspan="3" class="empty">Collecting…</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='metrics.js') }}"></script>
+{% endblock %}
